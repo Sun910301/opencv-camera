@@ -29,12 +29,12 @@ int main(int argc, char* argv[])
         fin1.close();
     }
     fin1.close();
-    Size image_size=Size(640,480);//¼v¶Hªº¤Ø¤o
-    Size board_size = Size(9, 6);     //¼Ğ©wªO¤W¨C¦æ¡B¦Cªº¨¤ÂI¼Æ
-    vector<Point2f> output;  //§Ö¨ú¨C´T¼v¶H¤WÀË´ú¨ìªº¨¤ÂI
-    vector<vector<Point2f>> savepoint; //Àx¦sÀË´ú¨ìªº©Ò¦³¨¤ÂI
+    Size image_size=Size(640,480);//å½±è±¡çš„å°ºå¯¸
+    Size board_size = Size(9, 6);     //æ¨™å®šæ¿ä¸Šæ¯è¡Œã€åˆ—çš„è§’é»æ•¸
+    vector<Point2f> output;  //å¿«å–æ¯å¹…å½±è±¡ä¸Šæª¢æ¸¬åˆ°çš„è§’é»
+    vector<vector<Point2f>> savepoint; //å„²å­˜æª¢æ¸¬åˆ°çš„æ‰€æœ‰è§’é»
     vector<vector<Point3f>>objpoints;
-    /*´£¨ú¨¤ÂI*/
+    /*æå–è§’é»*/
    // char filename[10]; 
     vector<Point3f>objectpoint;
     for (int i = 0; i < CHECKERBOARD[1]; i++) {
@@ -52,25 +52,25 @@ int main(int argc, char* argv[])
             Mat gray;
             cvtColor(Input, gray, CV_RGB2GRAY);
             cornerSubPix(gray, output, Size(11, 11), Size(-1, -1), TermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 40, 0.01));
-            /*¨Èµe¯Àºë½T¤Æ*/
-            //find4QuadCornerSubpix(view_gray, output, Size(3, 3));//¹ï²Ê´£¨úªº¨¤ÂI¶i¦æºë½T¤Æ  
-            //drawChessboardCorners(gray, board_size, output, true);//¥Î©ó¦b¹Ï¤ù¤¤¼Ğ°O¨¤ÂI  
-            savepoint.push_back(output);//Àx¦s¨Èµe¯À¨¤ÂI  
+            /*äºç•«ç´ ç²¾ç¢ºåŒ–*/
+            //find4QuadCornerSubpix(view_gray, output, Size(3, 3));//å°ç²—æå–çš„è§’é»é€²è¡Œç²¾ç¢ºåŒ–  
+            //drawChessboardCorners(gray, board_size, output, true);//ç”¨æ–¼åœ¨åœ–ç‰‡ä¸­æ¨™è¨˜è§’é»  
+            savepoint.push_back(output);//å„²å­˜äºç•«ç´ è§’é»  
             //objpoints.push_back(objectpoint);
-            // 0("Camera Calibration", view_gray);//Åã¥Ü¹Ï¤ù  
-           //  waitKey(500);//°±¥b¬í
+            // 0("Camera Calibration", view_gray);//é¡¯ç¤ºåœ–ç‰‡  
+           //  waitKey(500);//åœåŠç§’
         }
         image_size.width = Input.cols;
         image_size.height = Input.rows;
         Input.release();
     }
-    //¤º¥~¤Ş¼Æª«¥ó
-    Mat cam_Mat = Mat(3, 3, CV_32FC1, Scalar::all(0));//K ¬°¬Û¾÷¯x°}¡A
-    Mat discoef_Mat = Mat(1, 5, CV_32FC1, Scalar::all(0));//D ¬° Mat[1][5]ªº·îÅÜ«Y¼Æ¯x°}
-    Mat tMat;//¨C´T¼v¶Hªº±ÛÂà¦V¶q
-    Mat rMat;//¨C´T¼v¶Hªº¥­²¾¦V¶q
-    calibrateCamera(objectpoint, savepoint, image_size, cam_Mat, discoef_Mat, rMat, tMat);//¬Û¾÷¼Ğ©w
-    /*¥Î¼Ğ©wªºµ²ªGÁB¥¿¼v¶H*/
+    //å…§å¤–å¼•æ•¸ç‰©ä»¶
+    Mat cam_Mat = Mat(3, 3, CV_32FC1, Scalar::all(0));//K ç‚ºç›¸æ©ŸçŸ©é™£ï¼Œ
+    Mat discoef_Mat = Mat(1, 5, CV_32FC1, Scalar::all(0));//D ç‚º Mat[1][5]çš„ç•¸è®Šä¿‚æ•¸çŸ©é™£
+    Mat tMat;//æ¯å¹…å½±è±¡çš„æ—‹è½‰å‘é‡
+    Mat rMat;//æ¯å¹…å½±è±¡çš„å¹³ç§»å‘é‡
+    calibrateCamera(objectpoint, savepoint, image_size, cam_Mat, discoef_Mat, rMat, tMat);//ç›¸æ©Ÿæ¨™å®š
+    /*ç”¨æ¨™å®šçš„çµæœçŸ¯æ­£å½±è±¡*/
     //for (int image_num = 1; image_num <= 10; image_num++)
     //{
         //sprintf_s(filename, "%d_L.jpg", image_num);
@@ -86,9 +86,9 @@ int main(int argc, char* argv[])
 
     //}
 }
-/*¬Û¾÷¼Ğ©w*/
-    /*vector<vector<Point3f>> object_points; //Àx¦s¼Ğ©wªO¤W¨¤ÂIªº¤Tºû®y¼Ğ,¬°¼Ğ©w¨ç¦¡ªº²Ä¤@­Ó¤Ş¼Æ
-    Size square_size = Size(20, 20);//¹ê»Ú´ú¶q±o¨ìªº¼Ğ©wªO¤W¨C­Ó´Ñ½L®æªº¤j¤p¡A³o¸Ì¨ä¹ê¨S´ú¡A´N°²©w¤F¤@­Ó­È¡A·PÄ±¼vÅT¤£¬O¤Ó¤j¡A«á­±¦A¬ã¨s¤U
+/*ç›¸æ©Ÿæ¨™å®š*/
+    /*vector<vector<Point3f>> object_points; //å„²å­˜æ¨™å®šæ¿ä¸Šè§’é»çš„ä¸‰ç¶­åº§æ¨™,ç‚ºæ¨™å®šå‡½å¼çš„ç¬¬ä¸€å€‹å¼•æ•¸
+    Size square_size = Size(20, 20);//å¯¦éš›æ¸¬é‡å¾—åˆ°çš„æ¨™å®šæ¿ä¸Šæ¯å€‹æ£‹ç›¤æ ¼çš„å¤§å°ï¼Œé€™è£¡å…¶å¯¦æ²’æ¸¬ï¼Œå°±å‡å®šäº†ä¸€å€‹å€¼ï¼Œæ„Ÿè¦ºå½±éŸ¿ä¸æ˜¯å¤ªå¤§ï¼Œå¾Œé¢å†ç ”ç©¶ä¸‹
     for (int t = 0; t < 10; t++)
     {
         vector<Point3f> tempPointSet;
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
             for (int j = 0; j < board_size.width; j++)
             {
                 Point3f realPoint;
-                //°²³]¼Ğ©wªO©ñ¦b¥@¬É®y¼Ğ¨t¤¤z=0ªº¥­­±¤W
+                //å‡è¨­æ¨™å®šæ¿æ”¾åœ¨ä¸–ç•Œåº§æ¨™ç³»ä¸­z=0çš„å¹³é¢ä¸Š
                 realPoint.x = i * square_size.width;
                 realPoint.y = j * square_size.height;
                 realPoint.z = 0;
